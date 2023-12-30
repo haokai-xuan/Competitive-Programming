@@ -1,48 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool starts_with_waterloo(string main_str, string match)
-{
-    if (main_str.find(match) == 0)
-    {
-        return true;
-    }
-    return false;
-}
-
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
 
+    map<string, int> mp;
+
     string main_str;
+    int temp;
 
-    string city, coldest_city;
-    int cp, coldest_cp;
+    string city, coldest_city = "Waterloo";
+    int coldest_temp = 201;
 
-    getline(cin >> ws, main_str);
-
-    while (!starts_with_waterloo(main_str, "Waterloo"))
+    while (true)
     {
         getline(cin >> ws, main_str);
 
-        for (int i = 0; i < main_str.size(); i++)
-        {
-            if (main_str[i] == ' ')
-            {
-                city = main_str.substr(0, i);
-                cp = stoi(main_str.substr(i));
-                // cout << coldest_cp << '\n';
-                break;
-            }
-        }
+        int pos = main_str.find(" ");
+        city = main_str.substr(0, pos);
+        temp = stoi(main_str.substr(pos + 1));
 
-        if (cp < coldest_cp)
+        // cout << "City: " << city << " Temp: " << temp << '\n';
+
+        mp.insert({city, temp});
+
+        if (city == "Waterloo")
         {
-            coldest_city = city;
-            coldest_cp = cp;
+            break;
         }
     }
+
+    for (auto const &[key, val] : mp)
+    {
+        if (val < coldest_temp)
+        {
+            coldest_temp = val;
+            coldest_city = key;
+        }
+    }
+
     cout << coldest_city << '\n';
 
     return 0;
