@@ -14,8 +14,8 @@ int main()
         {":-P", "stick out my tongue"},
         {"(~.~)", "sleepy"},
         {"TA", "totally awesome"},
-        {"CCC", "Canadian Comcout <<ing Competition"},
-        {"cuz", "because"},
+        {"CCC", "Canadian Computing Competition"},
+        {"CUZ", "because"},
         {"TY", "thank-you"},
         {"YW", "you're welcome"},
         {"TTYL", "talk to you later"}};
@@ -27,6 +27,7 @@ int main()
         if (msg.find(s) == msg.end())
         {
             cout << s << '\n';
+            // break;
         }
         else
         {
