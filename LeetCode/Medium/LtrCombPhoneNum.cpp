@@ -1,6 +1,15 @@
 class Solution {
 public:
-    map<char, string> buttons = {
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty())
+            return {};
+        vector<string> ans;
+        solve(digits, digits, "", ans);
+        return ans;
+    }
+
+private:
+    unordered_map<char, string> mp = {
         {'2', "abc"},
         {'3', "def"},
         {'4', "ghi"},
@@ -11,23 +20,15 @@ public:
         {'9', "wxyz"},
     };
 
-    vector<string> ans;
-
-    vector<string> letterCombinations(string digits) {
-        solve(0, "", digits);        
-
-        return ans;
-    }
-
-    void solve(int curr_index, string curr_str, string digits) {
-        if (curr_str.length() == digits.length() && digits.length()){
-            ans.push_back(curr_str);
+    void solve(string digits, string curr_digits, string curr, vector<string> &ans) {
+        if (digits.size() == curr.size()) {
+            ans.push_back(curr);
             return;
         }
-
-        string chars = buttons[digits[curr_index]];
-        for (int i = 0; i < chars.length(); i++) {
-            solve(curr_index + 1, curr_str + chars[i], digits);
+        for (auto &c : mp[curr_digits[0]]) {
+            string temp_digits = curr_digits;
+            temp_digits.erase(0, 1);
+            solve(digits, temp_digits, curr + c, ans);
         }
     }
 };
