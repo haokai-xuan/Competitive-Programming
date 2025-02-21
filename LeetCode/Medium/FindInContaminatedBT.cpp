@@ -12,42 +12,28 @@
 class FindElements {
 public:
     TreeNode *tree_root;
+    unordered_map<int, bool> mp;
     FindElements(TreeNode* root) {
         tree_root = root;
         tree_root->val = 0;
+        mp[0] = true;
         build_tree(tree_root);
     }
     
     bool find(int target) {
-        TreeNode *temp = tree_root;
-        
-        queue<TreeNode*> q;
-        q.push(temp);
-
-        while (!q.empty()) {
-            TreeNode* curr = q.front();
-            q.pop();
-
-            if (curr->val == target)
-                return true;
-
-            if (curr->left)
-                q.push(curr->left);
-            if (curr->right)
-                q.push(curr->right);
-        }
-
-        return false;
+        return mp.count(target);
     }
 
 private:
     void build_tree(TreeNode *root) {
         if (root->left) {
             root->left->val = root->val * 2 + 1;
+            mp[root->left->val] = true;
             build_tree(root->left);
         }
         if (root->right) {
             root->right->val = root->val * 2 + 2;
+            mp[root->right->val] = true;
             build_tree(root->right);
         }
     }
