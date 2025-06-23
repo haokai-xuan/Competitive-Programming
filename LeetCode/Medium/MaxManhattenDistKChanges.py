@@ -12,7 +12,7 @@ class Solution:
                 south += 1
             elif c == 'E':
                 east += 1
-            else:
+            elif c == 'W':
                 west += 1
 
             t1 = min(north, south, k)
