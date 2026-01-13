@@ -1,66 +1,23 @@
 class Solution {
-public:
-    double separateSquares(vector<vector<int>>& squares) {
-        double tot_area = total_area(squares);
-        // cout << "Total area: " << tot_area << '\n';
-
-        double ub = get_ub(squares);
-        double lb = 0;
-        double mid;
-        double area_above;
-        
-        // # iterations = log2(range of vals / precision) + 1
-        for (int i = 0; i < 48; i++) {
-            mid = (lb + ub) / 2;
-            // cout << "Mid: " << mid << ", ";
-            area_above = upper_area(squares, mid);
-            // cout << "Upper area: " << area_above << ", ";
-            if (abs(area_above - 0.5 * tot_area) < 1e-5) {
-                ub = mid;
-            }
-
-            else if (area_above > 0.5 * tot_area) {
-                // cout << "Set lb to mid\n";
-                lb = mid;
-            }
-            else {
-                // cout << "Set ub to mid\n";
-                ub = mid;
-            }
-        }
-        return mid;
-    }
-
-private:
-    double upper_area(vector<vector<int>> &squares, double y_line) {
-        double area_above = 0;
-        for (const auto &sq : squares) {
-            if (sq[1] + sq[2] <= y_line) {
-                continue;
-            }
-            double width = sq[2];
-            double height = (sq[1] + sq[2]) - max((double)sq[1], y_line);
-            area_above += width * height;
-        }
-
-        return area_above;
-    }
-
-    double total_area(vector<vector<int>> &squares) {
+    double getAreaBottom(vector<vector<int>>& squares, double line) {
         double area = 0;
-        for (const auto &sq : squares) {
-            area += (double)sq[2] * sq[2];
+        for (auto& s : squares) {
+            if (s[1] < line) area += min(static_cast<double>(s[2]), line - s[1]) * s[2];
         }
         return area;
     }
+public:
+    double separateSquares(vector<vector<int>>& squares) {
+        double totalArea = 0;
+        for (auto& s : squares) totalArea += static_cast<double>(s[2]) * s[2];
 
-    double get_ub(vector<vector<int>> &squares) {
-        double max_ = 0;
-        for (const auto &sq : squares) {
-            if (sq[1] + sq[2] > max_)
-                max_ = sq[1] + sq[2];
+        double bottom = 0, top = 1e9 + 5 * 1e4;
+        while (top - bottom >= 1e-5) {
+            double mid = bottom + (top - bottom) / 2;
+            double areaBottom = getAreaBottom(squares, mid);
+            if (areaBottom >= totalArea / 2) top = mid;
+            else bottom = mid;
         }
-
-        return max_;
+        return top;
     }
 };
